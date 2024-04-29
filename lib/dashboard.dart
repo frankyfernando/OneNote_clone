@@ -17,6 +17,8 @@ class _DashboardNoteState extends State<DashboardNote> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        shadowColor: Colors.grey,
+        elevation: 3,
         automaticallyImplyLeading: false,
         title: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -82,21 +84,74 @@ class _DashboardNoteState extends State<DashboardNote> {
               thickness: 1,
               color: Color.fromARGB(255, 228, 227, 227),
             ),
-            ListTile(
-              leading: Icon(
-                Icons.exit_to_app,
-                color: Colors.purple,
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.exit_to_app,
+                    color: Colors.purple,
+                  ),
+                  title: Text(
+                    'Keluar dari OneNote',
+                    style: TextStyle(
+                        color: Colors.purple, fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
-              title: Text(
-                'Keluar dari OneNote',
-                style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
-
-              ),
-            )
+            ),
           ],
         ),
       ),
-      
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        notchMargin: 8,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.add,
+                      color: Colors.purple,
+                    ),
+                    Text(
+                      'Halaman',
+                      style: TextStyle(
+                        color: Colors.purple,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.create),
+                  color: Colors.purple,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.camera_alt),
+                  color: Colors.purple,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.more_vert_outlined),
+                  color: Colors.purple,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
