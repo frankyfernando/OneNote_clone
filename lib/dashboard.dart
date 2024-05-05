@@ -2,15 +2,56 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_onenote/account.dart';
+import 'package:flutter_onenote/halaman_screen.dart';
+import 'package:flutter_onenote/login.dart';
 
+// ignore: must_be_immutable
 class DashboardNote extends StatefulWidget {
   const DashboardNote({super.key});
-
   @override
   State<DashboardNote> createState() => _DashboardNoteState();
 }
 
 class _DashboardNoteState extends State<DashboardNote> {
+  List<Map<String, String>> notes = [];
+  dynamic title;
+  dynamic deskripsi;
+  void changedata(Map<String, String> result) {
+    setState(() {
+      notes.add(result);
+    });
+  }
+
+  // fungsi update note
+  void updateNote(int index, String title, String deskripsi) {
+    if (index == 0 && index < notes.length) {
+      notes[index]['title'] = title;
+      notes[index]['deskripsi'] = deskripsi;
+    }
+  }
+
+  //fungsi mengirim data dari file dashboard ke halaman screen
+  void kirimData(int index) async {
+    Map<String, String> result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HalamanScreen(
+          titleInit: notes[index]['title'],
+          deskripsiInit: notes[index]['deskripsi'],
+        ),
+      ),
+    );
+    updateNote(index, result['title']!, result['deskripsi']!);
+    setState(() {});
+  }
+
+  // fungsi delete note
+  void deleteNote(int index) {
+    if (index == 0 && index < notes.length) {
+      notes.removeAt(index);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
@@ -78,7 +119,7 @@ class _DashboardNoteState extends State<DashboardNote> {
             ListTile(
               leading: Account(),
               title: Text('Admin'),
-              subtitle: Text('admin@gamil.com'),
+              subtitle: Text('admin@gmail.com'),
             ),
             Divider(
               thickness: 1,
@@ -87,6 +128,12 @@ class _DashboardNoteState extends State<DashboardNote> {
             MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
+                onTap: () => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Login(),
+                    ),
+                    (route) => false),
                 child: ListTile(
                   leading: Icon(
                     Icons.exit_to_app,
@@ -103,6 +150,68 @@ class _DashboardNoteState extends State<DashboardNote> {
           ],
         ),
       ),
+      body: ListView.builder(
+        itemCount: notes.length,
+        itemBuilder: (context, index) {
+          title = notes[index]['title'];
+          deskripsi = notes[index]['deskripsi'];
+          return GestureDetector(
+            onTap: () {
+              kirimData(index);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 1,
+                    offset: Offset(1, 0),
+                  ),
+                  BoxShadow(
+                    color: Colors.white,
+                    offset: Offset(0, -1),
+                    spreadRadius: 2,
+                  )
+                ],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.all(20),
+              padding: EdgeInsets.only(left: 20, top: 5, bottom: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListTile(
+                    title: Text(
+                      title,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      deskripsi,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w100),
+                    ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        deleteNote(index);
+                        setState(() {});
+                      },
+                      icon: Icon(Icons.delete),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         notchMargin: 8,
@@ -112,7 +221,15 @@ class _DashboardNoteState extends State<DashboardNote> {
             MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  Map<String, String> result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HalamanScreen(),
+                    ),
+                  );
+                  changedata(result);
+                },
                 child: Row(
                   children: [
                     Icon(

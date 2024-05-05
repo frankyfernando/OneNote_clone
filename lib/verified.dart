@@ -1,11 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_onenote/dashboard.dart';
 
-class Verified extends StatelessWidget {
+class Verified extends StatefulWidget {
   const Verified({super.key});
 
   @override
+  State<Verified> createState() => _VerifiedState();
+}
+
+class _VerifiedState extends State<Verified> {
+    TextEditingController password = TextEditingController();
+    @override
+    void initState() {
+      super.initState();
+      password = TextEditingController(text: 'password');
+    }
+    void verifiedPassword() {
+      if (password.text == 'password') {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => DashboardNote()),
+            (route) => false);
+      }
+      else(
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Maaf Password Anda Salah"),),)
+      );
+    }
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController password = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         title: Container(
@@ -31,6 +54,7 @@ class Verified extends StatelessWidget {
             // Row 2
             TextField(
               controller: password,
+              obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Kata sandi',
               ),
@@ -43,7 +67,7 @@ class Verified extends StatelessWidget {
             Container(
               alignment: Alignment.topLeft,
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: verifiedPassword,
                   child: Text(
                     'Lupa kata sandi?',
                     style: TextStyle(
@@ -62,10 +86,13 @@ class Verified extends StatelessWidget {
                   color: Color.fromARGB(255, 45, 76, 255),
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      fixedSize: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height)
+                        fixedSize: Size(MediaQuery.of(context).size.width,
+                            MediaQuery.of(context).size.height)),
+                    onPressed: verifiedPassword,
+                    child: Text(
+                      "Masuk",
+                      style: TextStyle(color: Colors.white),
                     ),
-                    onPressed: () {},
-                    child: Text("Masuk", style: TextStyle(color: Colors.white),),
                   ),
                 ),
               ],

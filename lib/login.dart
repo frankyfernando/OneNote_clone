@@ -2,12 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_onenote/verified.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  TextEditingController loginController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    loginController = TextEditingController(text: 'admin@gmail.com');
+  }
+
+  void username() {
+    String username = loginController.text;
+    if (username == 'admin@gmail.com') {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Verified()));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Maaf username salah'),),);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController loginController = TextEditingController();
     return Scaffold(
       appBar: AppBar(),
       body: Column(
@@ -44,12 +66,11 @@ class Login extends StatelessWidget {
             height: 50,
             alignment: Alignment.center,
             child: TextField(
-              style: TextStyle(color: Colors.grey),
               controller: loginController,
               decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Email, Nomor telepon, Nama Skype',
-                  ),
+                border: OutlineInputBorder(),
+                labelText: 'Email, Nomor telepon, Nama Skype',
+              ),
             ),
           ),
           SizedBox(
@@ -63,9 +84,7 @@ class Login extends StatelessWidget {
             color: Colors.purple,
             width: MediaQuery.of(context).size.width,
             child: TextButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Verified()));
-              },
+              onPressed: username,
               style: TextButton.styleFrom(
                 fixedSize: Size(MediaQuery.of(context).size.width,
                     MediaQuery.of(context).size.height),
