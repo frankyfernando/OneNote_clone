@@ -9,33 +9,35 @@ class Verified extends StatefulWidget {
 }
 
 class _VerifiedState extends State<Verified> {
-    TextEditingController password = TextEditingController();
-    @override
-    void initState() {
-      super.initState();
-      password = TextEditingController(text: 'password');
-    }
-    void verifiedPassword() {
-      if (password.text == 'password') {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => DashboardNote()),
-            (route) => false);
-      }
-      else(
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Maaf Password Anda Salah"),),)
+  TextEditingController password = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    password = TextEditingController(text: 'password');
+  }
+
+  void verifiedPassword() {
+    if (password.text == 'password') {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const DashboardNote()),
+          (route) => false);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Maaf Password Anda Salah"),
+        ),
       );
     }
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          child: Image.asset(
-            'asset/microsoftlogo.jpg',
-            width: 200,
-          ),
+        title: Image.asset(
+          'asset/microsoftlogo.jpg',
+          width: 200,
         ),
       ),
       body: Padding(
@@ -45,7 +47,7 @@ class _VerifiedState extends State<Verified> {
             // Row 1
             Container(
               alignment: Alignment.topLeft,
-              child: Text(
+              child: const Text(
                 'Masukkan kata sandi',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
               ),
@@ -55,11 +57,11 @@ class _VerifiedState extends State<Verified> {
             TextField(
               controller: password,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Kata sandi',
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
 
@@ -68,7 +70,7 @@ class _VerifiedState extends State<Verified> {
               alignment: Alignment.topLeft,
               child: TextButton(
                   onPressed: verifiedPassword,
-                  child: Text(
+                  child: const Text(
                     'Lupa kata sandi?',
                     style: TextStyle(
                       color: Color.fromARGB(255, 0, 91, 247),
@@ -83,13 +85,13 @@ class _VerifiedState extends State<Verified> {
                 Container(
                   width: 100,
                   height: 40,
-                  color: Color.fromARGB(255, 45, 76, 255),
+                  color: const Color.fromARGB(255, 45, 76, 255),
                   child: TextButton(
                     style: TextButton.styleFrom(
                         fixedSize: Size(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height)),
                     onPressed: verifiedPassword,
-                    child: Text(
+                    child: const Text(
                       "Masuk",
                       style: TextStyle(color: Colors.white),
                     ),

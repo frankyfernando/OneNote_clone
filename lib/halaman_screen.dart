@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 // ignore: must_be_immutable
 class HalamanScreen extends StatefulWidget {
@@ -47,11 +45,11 @@ class _HalamanScreenState extends State<HalamanScreen> {
                 addNote(title.text, deskripsi.text);
                 Navigator.pop(context, notes);
               },
-              icon: Icon(Icons.save),
+              icon: const Icon(Icons.save),
             ),
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.more_vert),
+              icon: const Icon(Icons.more_vert),
             ),
           ],
         ),
@@ -59,17 +57,17 @@ class _HalamanScreenState extends State<HalamanScreen> {
       body: ListView(
         children: [
           Padding(
-            padding: EdgeInsets.all(40),
+            padding: const EdgeInsets.all(40),
             child: TextField(
               controller: title,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: "",
                 contentPadding: EdgeInsets.only(right: 40),
                 border: UnderlineInputBorder(),
               ),
             ),
           ),
-          Row(
+          const Row(
             children: [
               Padding(
                 padding: EdgeInsets.only(right: 40),
@@ -81,7 +79,7 @@ class _HalamanScreenState extends State<HalamanScreen> {
             height: MediaQuery.of(context).size.height,
             child: TextField(
               controller: deskripsi,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
                 ),
@@ -92,26 +90,5 @@ class _HalamanScreenState extends State<HalamanScreen> {
         ],
       ),
     );
-  }
-}
-
-class LinePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = Color.fromARGB(255, 236, 234, 234)
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round;
-
-    final double startY = size.height / 2;
-    const double startX = 0;
-    final double endX = size.width;
-
-    canvas.drawLine(Offset(startX, startY), Offset(endX, startY), paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
   }
 }

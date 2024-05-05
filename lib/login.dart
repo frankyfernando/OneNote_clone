@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_onenote/verified.dart';
 
 class Login extends StatefulWidget {
@@ -22,9 +21,9 @@ class _LoginState extends State<Login> {
     String username = loginController.text;
     if (username == 'admin@gmail.com') {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Verified()));
+          context, MaterialPageRoute(builder: (context) => const Verified()));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Maaf username salah'),),);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Maaf username salah'),),);
     }
   }
 
@@ -36,7 +35,7 @@ class _LoginState extends State<Login> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           // Row 1
-          Center(
+          const Center(
             child: Text(
               "Selamat Datang di OneNote",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -44,7 +43,7 @@ class _LoginState extends State<Login> {
           ),
 
           // Row 2
-          Center(
+          const Center(
             child: Text(
               "Buat catatan. Tetap Rapi.",
               style: TextStyle(fontWeight: FontWeight.w200),
@@ -58,7 +57,7 @@ class _LoginState extends State<Login> {
 
           // Row 4
           Container(
-            margin: EdgeInsets.only(
+            margin: const EdgeInsets.only(
               left: 20,
               right: 20,
             ),
@@ -67,19 +66,19 @@ class _LoginState extends State<Login> {
             alignment: Alignment.center,
             child: TextField(
               controller: loginController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Email, Nomor telepon, Nama Skype',
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
 
           // Row 5
           Container(
-            margin: EdgeInsets.only(left: 20, right: 20),
+            margin: const EdgeInsets.only(left: 20, right: 20),
             height: 40,
             color: Colors.purple,
             width: MediaQuery.of(context).size.width,
@@ -89,7 +88,7 @@ class _LoginState extends State<Login> {
                 fixedSize: Size(MediaQuery.of(context).size.width,
                     MediaQuery.of(context).size.height),
               ),
-              child: Text(
+              child: const Text(
                 "Masuk",
                 style: TextStyle(
                   color: Colors.white,
@@ -97,7 +96,7 @@ class _LoginState extends State<Login> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           )
         ],

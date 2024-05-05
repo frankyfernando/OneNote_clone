@@ -12,7 +12,7 @@ class Account extends StatelessWidget {
       ),
       width: 40,
       height: 40,
-      child: Center(
+      child: const Center(
         child: Text('A', style: TextStyle(color: Colors.white, fontSize: 20),),
       ),
     );

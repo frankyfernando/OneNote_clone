@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_onenote/account.dart';
 import 'package:flutter_onenote/halaman_screen.dart';
 import 'package:flutter_onenote/login.dart';
@@ -54,9 +52,9 @@ class _DashboardNoteState extends State<DashboardNote> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       appBar: AppBar(
         shadowColor: Colors.grey,
         elevation: 3,
@@ -68,24 +66,24 @@ class _DashboardNoteState extends State<DashboardNote> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
-                  onTap: () => _scaffoldKey.currentState!.openDrawer(),
-                  child: Account(),
+                  onTap: () => scaffoldKey.currentState!.openDrawer(),
+                  child: const Account(),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 30,
               ),
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'OneNote',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     IconButton(
                       onPressed: () {},
-                      icon: Icon(Icons.search),
+                      icon: const Icon(Icons.search),
                     ),
                   ],
                 ),
@@ -106,22 +104,22 @@ class _DashboardNoteState extends State<DashboardNote> {
                     onPressed: () {},
                     icon: IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: Icon(Icons.arrow_back),
+                      icon: const Icon(Icons.arrow_back),
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Akun',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
               ),
             ),
-            ListTile(
+            const ListTile(
               leading: Account(),
               title: Text('Admin'),
               subtitle: Text('admin@gmail.com'),
             ),
-            Divider(
+            const Divider(
               thickness: 1,
               color: Color.fromARGB(255, 228, 227, 227),
             ),
@@ -131,10 +129,10 @@ class _DashboardNoteState extends State<DashboardNote> {
                 onTap: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Login(),
+                      builder: (context) => const Login(),
                     ),
                     (route) => false),
-                child: ListTile(
+                child: const ListTile(
                   leading: Icon(
                     Icons.exit_to_app,
                     color: Colors.purple,
@@ -167,9 +165,9 @@ class _DashboardNoteState extends State<DashboardNote> {
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 5,
                     blurRadius: 1,
-                    offset: Offset(1, 0),
+                    offset: const Offset(1, 0),
                   ),
-                  BoxShadow(
+                  const BoxShadow(
                     color: Colors.white,
                     offset: Offset(0, -1),
                     spreadRadius: 2,
@@ -178,22 +176,22 @@ class _DashboardNoteState extends State<DashboardNote> {
                 borderRadius: BorderRadius.circular(10),
               ),
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.all(20),
-              padding: EdgeInsets.only(left: 20, top: 5, bottom: 5),
+              margin: const EdgeInsets.all(20),
+              padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ListTile(
                     title: Text(
                       title,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
                       deskripsi,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.w100),
@@ -203,7 +201,7 @@ class _DashboardNoteState extends State<DashboardNote> {
                         deleteNote(index);
                         setState(() {});
                       },
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                     ),
                   ),
                 ],
@@ -213,7 +211,7 @@ class _DashboardNoteState extends State<DashboardNote> {
         },
       ),
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
+        shape: const CircularNotchedRectangle(),
         notchMargin: 8,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -230,7 +228,7 @@ class _DashboardNoteState extends State<DashboardNote> {
                   );
                   changedata(result);
                 },
-                child: Row(
+                child: const Row(
                   children: [
                     Icon(
                       Icons.add,
@@ -251,17 +249,17 @@ class _DashboardNoteState extends State<DashboardNote> {
               children: [
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.create),
+                  icon: const Icon(Icons.create),
                   color: Colors.purple,
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.camera_alt),
+                  icon: const Icon(Icons.camera_alt),
                   color: Colors.purple,
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.more_vert_outlined),
+                  icon: const Icon(Icons.more_vert_outlined),
                   color: Colors.purple,
                 ),
               ],
