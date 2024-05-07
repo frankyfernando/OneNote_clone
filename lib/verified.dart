@@ -69,7 +69,7 @@ class _VerifiedState extends State<Verified> {
             Container(
               alignment: Alignment.topLeft,
               child: TextButton(
-                  onPressed: verifiedPassword,
+                  onPressed: (){},
                   child: const Text(
                     'Lupa kata sandi?',
                     style: TextStyle(
