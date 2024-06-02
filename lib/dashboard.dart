@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onenote/account.dart';
 import 'package:flutter_onenote/halaman_screen.dart';
+import 'package:flutter_onenote/logic.dart';
 import 'package:flutter_onenote/login.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class DashboardNote extends StatefulWidget {
@@ -14,11 +16,6 @@ class _DashboardNoteState extends State<DashboardNote> {
   List<Map<String, String>> notes = [];
   dynamic title;
   dynamic deskripsi;
-  void changedata(Map<String, String> result) {
-    setState(() {
-      notes.add(result);
-    });
-  }
 
   // fungsi update note
   void updateNote(int index, String title, String deskripsi) {
@@ -28,30 +25,10 @@ class _DashboardNoteState extends State<DashboardNote> {
     }
   }
 
-  //fungsi mengirim data dari file dashboard ke halaman screen
-  void kirimData(int index) async {
-    Map<String, String> result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HalamanScreen(
-          titleInit: notes[index]['title'],
-          deskripsiInit: notes[index]['deskripsi'],
-        ),
-      ),
-    );
-    updateNote(index, result['title']!, result['deskripsi']!);
-    setState(() {});
-  }
-
-  // fungsi delete note
-  void deleteNote(int index) {
-    if (index == 0 && index < notes.length) {
-      notes.removeAt(index);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final readNote = context.read<NoteData>();
+    final watchNote = context.watch<NoteData>();
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
     return Scaffold(
       key: scaffoldKey,
@@ -149,13 +126,19 @@ class _DashboardNoteState extends State<DashboardNote> {
         ),
       ),
       body: ListView.builder(
-        itemCount: notes.length,
+        itemCount: watchNote.notes.length,
         itemBuilder: (context, index) {
-          title = notes[index]['title'];
-          deskripsi = notes[index]['deskripsi'];
+          title = watchNote.notes[index].title;
+          deskripsi = watchNote.notes[index].deskripsi;
           return GestureDetector(
-            onTap: () {
-              kirimData(index);
+            onTap: () async{
+              readNote.kirimData(index);
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HalamanScreen(action: 'update', index: index,)));
+              readNote.titleController = TextEditingController(text: '');
+              readNote.deskripsiController = TextEditingController(text: '');
             },
             child: Container(
               decoration: BoxDecoration(
@@ -198,8 +181,7 @@ class _DashboardNoteState extends State<DashboardNote> {
                     ),
                     trailing: IconButton(
                       onPressed: () {
-                        deleteNote(index);
-                        setState(() {});
+                        watchNote.deleteNote(index);
                       },
                       icon: const Icon(Icons.delete),
                     ),
@@ -219,14 +201,13 @@ class _DashboardNoteState extends State<DashboardNote> {
             MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
-                onTap: () async {
-                  Map<String, String> result = await Navigator.push(
+                onTap: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HalamanScreen(),
+                      builder: (context) => HalamanScreen(action: 'add'),
                     ),
                   );
-                  changedata(result);
                 },
                 child: const Row(
                   children: [

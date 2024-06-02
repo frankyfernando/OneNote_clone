@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_onenote/logic.dart';
 import 'package:flutter_onenote/login.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (context) => NoteData())],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

@@ -1,38 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_onenote/logic.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class HalamanScreen extends StatefulWidget {
-  String? titleInit;
-  String? deskripsiInit;
-  HalamanScreen({super.key, this.titleInit = '', this.deskripsiInit = ''});
+  String action;
+  int index;
+  HalamanScreen({super.key, required this.action, this.index = 0});
 
   @override
   State<HalamanScreen> createState() => _HalamanScreenState();
 }
 
 class _HalamanScreenState extends State<HalamanScreen> {
-  TextEditingController title = TextEditingController();
-  TextEditingController deskripsi = TextEditingController();
-  Map<String, String> notes = {'title': '', 'deskripsi': ''};
+  late String formattedDate;
   @override
   void initState() {
     super.initState();
-    title = TextEditingController(text: widget.titleInit);
-    deskripsi = TextEditingController(text: widget.deskripsiInit);
-  }
-
-  // fungsi add note
-  void addNote(String title, String deskripsi) {
-    setState(() {
-      notes.addAll({
-        'title': title,
-        'deskripsi': deskripsi,
-      });
-    });
+    formattedDate =
+        DateFormat('EEEE, dd MMMM yyyy  HH:mm').format(DateTime.now());
   }
 
   @override
   Widget build(BuildContext context) {
+    final readNote = context.read<NoteData>();
     return Scaffold(
       appBar: AppBar(
         elevation: 4,
@@ -42,8 +34,17 @@ class _HalamanScreenState extends State<HalamanScreen> {
           children: [
             IconButton(
               onPressed: () {
-                addNote(title.text, deskripsi.text);
-                Navigator.pop(context, notes);
+                if (widget.action == 'add') {
+                  readNote.addNote(readNote.titleController.text,
+                      readNote.deskripsiController.text);
+                  Navigator.pop(context);
+                } else if (widget.action == 'update') {
+                  readNote.updateNote(
+                      widget.index,
+                      readNote.titleController.text,
+                      readNote.deskripsiController.text);
+                  Navigator.pop(context);
+                }
               },
               icon: const Icon(Icons.save),
             ),
@@ -59,7 +60,7 @@ class _HalamanScreenState extends State<HalamanScreen> {
           Padding(
             padding: const EdgeInsets.all(40),
             child: TextField(
-              controller: title,
+              controller: readNote.titleController,
               decoration: const InputDecoration(
                 labelText: "",
                 contentPadding: EdgeInsets.only(right: 40),
@@ -67,18 +68,18 @@ class _HalamanScreenState extends State<HalamanScreen> {
               ),
             ),
           ),
-          const Row(
+          Row(
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(right: 40),
               ),
-              Text("Rabu, 01 Mei 2024      15.51"),
+              Text(formattedDate),
             ],
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height,
             child: TextField(
-              controller: deskripsi,
+              controller: readNote.deskripsiController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
