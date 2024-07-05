@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Note {
   String title;
   String deskripsi;
-
   Note({required this.title, required this.deskripsi});
 }
 
 class NoteData extends ChangeNotifier {
   TextEditingController titleController = TextEditingController(text: '');
   TextEditingController deskripsiController = TextEditingController(text: '');
+  String formattedDate =
+      DateFormat('EEEE, dd MMMM yyyy  HH:mm').format(DateTime.now());
   List<Note> _notes = [Note(title: 'title', deskripsi: 'deskripsi')];
   List<Note> get notes => _notes;
   set changNote(List<Note> note) {

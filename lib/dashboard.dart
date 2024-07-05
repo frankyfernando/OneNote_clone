@@ -13,18 +13,6 @@ class DashboardNote extends StatefulWidget {
 }
 
 class _DashboardNoteState extends State<DashboardNote> {
-  List<Map<String, String>> notes = [];
-  dynamic title;
-  dynamic deskripsi;
-
-  // fungsi update note
-  void updateNote(int index, String title, String deskripsi) {
-    if (index == 0 && index < notes.length) {
-      notes[index]['title'] = title;
-      notes[index]['deskripsi'] = deskripsi;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final readNote = context.read<NoteData>();
@@ -128,8 +116,6 @@ class _DashboardNoteState extends State<DashboardNote> {
       body: ListView.builder(
         itemCount: watchNote.notes.length,
         itemBuilder: (context, index) {
-          title = watchNote.notes[index].title;
-          deskripsi = watchNote.notes[index].deskripsi;
           return GestureDetector(
             onTap: () async{
               readNote.kirimData(index);
@@ -166,14 +152,14 @@ class _DashboardNoteState extends State<DashboardNote> {
                 children: [
                   ListTile(
                     title: Text(
-                      title,
+                      readNote.notes[index].title,
                       style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
-                      deskripsi,
+                      readNote.notes[index].deskripsi,
                       style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,

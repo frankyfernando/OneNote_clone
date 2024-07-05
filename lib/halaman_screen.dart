@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onenote/logic.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -14,14 +13,6 @@ class HalamanScreen extends StatefulWidget {
 }
 
 class _HalamanScreenState extends State<HalamanScreen> {
-  late String formattedDate;
-  @override
-  void initState() {
-    super.initState();
-    formattedDate =
-        DateFormat('EEEE, dd MMMM yyyy  HH:mm').format(DateTime.now());
-  }
-
   @override
   Widget build(BuildContext context) {
     final readNote = context.read<NoteData>();
@@ -73,7 +64,7 @@ class _HalamanScreenState extends State<HalamanScreen> {
               const Padding(
                 padding: EdgeInsets.only(right: 40),
               ),
-              Text(formattedDate),
+              Text(readNote.formattedDate),
             ],
           ),
           SizedBox(
