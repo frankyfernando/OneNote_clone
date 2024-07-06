@@ -1,9 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_onenote/logic.dart';
-import 'package:flutter_onenote/login.dart';
+import 'package:flutter_onenote/firebase_options.dart';
+import 'package:flutter_onenote/provider/notes_provider.dart';
+import 'package:flutter_onenote/views/login.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MultiProvider(
     providers: [ChangeNotifierProvider(create: (context) => NoteData())],
     child: const MyApp(),

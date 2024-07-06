@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_onenote/logic.dart';
+import 'package:flutter_onenote/provider/notes_provider.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class HalamanScreen extends StatefulWidget {
-  String action;
   int index;
-  HalamanScreen({super.key, required this.action, this.index = 0});
+  HalamanScreen({super.key, this.index = 0});
 
   @override
   State<HalamanScreen> createState() => _HalamanScreenState();
@@ -16,6 +15,7 @@ class _HalamanScreenState extends State<HalamanScreen> {
   @override
   Widget build(BuildContext context) {
     final readNote = context.read<NoteData>();
+    final watchNote = context.watch<NoteData>();
     return Scaffold(
       appBar: AppBar(
         elevation: 4,
@@ -24,18 +24,19 @@ class _HalamanScreenState extends State<HalamanScreen> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IconButton(
-              onPressed: () {
-                if (widget.action == 'add') {
-                  readNote.addNote(readNote.titleController.text,
-                      readNote.deskripsiController.text);
-                  Navigator.pop(context);
-                } else if (widget.action == 'update') {
-                  readNote.updateNote(
-                      widget.index,
-                      readNote.titleController.text,
-                      readNote.deskripsiController.text);
-                  Navigator.pop(context);
+              onPressed: () async {
+                bool response = await watchNote.addNote(
+                    deskripsi: readNote.deskripsiController.text,
+                    time: DateTime.now(),
+                    title: readNote.titleController.text);
+                if (response) {
+                  print('add berhasil');
+                } else {
+                  print('error');
                 }
+                readNote.hapusData();
+                readNote.getNotes();
+                Navigator.pop(context);
               },
               icon: const Icon(Icons.save),
             ),

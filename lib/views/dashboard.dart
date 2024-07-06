@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_onenote/account.dart';
-import 'package:flutter_onenote/halaman_screen.dart';
-import 'package:flutter_onenote/logic.dart';
-import 'package:flutter_onenote/login.dart';
+import 'package:flutter_onenote/views/account.dart';
+import 'package:flutter_onenote/views/halaman_screen.dart';
+import 'package:flutter_onenote/provider/notes_provider.dart';
+import 'package:flutter_onenote/views/login.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -113,16 +113,22 @@ class _DashboardNoteState extends State<DashboardNote> {
           ],
         ),
       ),
-      body: ListView.builder(
-        itemCount: watchNote.notes.length,
+      body: Consumer<NoteData>(builder: (context, provider, child) {
+        if(provider.isLoading){
+          return Center(child: const CircularProgressIndicator());
+        }
+      else{
+        return ListView.builder(
+        itemCount: watchNote.dataNote.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () async{
-              readNote.kirimData(index);
+            onTap: () async {
               await Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => HalamanScreen(action: 'update', index: index,)));
+                      builder: (context) => HalamanScreen(
+                            index: index,
+                          )));
               readNote.titleController = TextEditingController(text: '');
               readNote.deskripsiController = TextEditingController(text: '');
             },
@@ -152,14 +158,14 @@ class _DashboardNoteState extends State<DashboardNote> {
                 children: [
                   ListTile(
                     title: Text(
-                      readNote.notes[index].title,
+                      watchNote.dataNote[index].title ?? "-",
                       style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
-                      readNote.notes[index].deskripsi,
+                      watchNote.dataNote[index].deskripsi ?? "-",
                       style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
@@ -167,7 +173,6 @@ class _DashboardNoteState extends State<DashboardNote> {
                     ),
                     trailing: IconButton(
                       onPressed: () {
-                        watchNote.deleteNote(index);
                       },
                       icon: const Icon(Icons.delete),
                     ),
@@ -177,6 +182,8 @@ class _DashboardNoteState extends State<DashboardNote> {
             ),
           );
         },
+      );}
+      },
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
@@ -191,7 +198,7 @@ class _DashboardNoteState extends State<DashboardNote> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HalamanScreen(action: 'add'),
+                      builder: (context) => HalamanScreen(),
                     ),
                   );
                 },

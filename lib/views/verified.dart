@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_onenote/dashboard.dart';
+import 'package:flutter_onenote/views/dashboard.dart';
 
 class Verified extends StatefulWidget {
   const Verified({super.key});

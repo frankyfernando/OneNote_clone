@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_onenote/verified.dart';
+import 'package:flutter_onenote/views/verified.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
