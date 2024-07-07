@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_onenote/model/notes_model.dart';
 import 'package:flutter_onenote/views/account.dart';
 import 'package:flutter_onenote/views/halaman_screen.dart';
 import 'package:flutter_onenote/provider/notes_provider.dart';
@@ -79,10 +80,10 @@ class _DashboardNoteState extends State<DashboardNote> {
                 ],
               ),
             ),
-            const ListTile(
-              leading: Account(),
-              title: Text('Admin'),
-              subtitle: Text('admin@gmail.com'),
+            ListTile(
+              leading: const Account(),
+              title: const Text('User'),
+              subtitle: Text('${readNote.emailController.text}'),
             ),
             const Divider(
               thickness: 1,
@@ -91,12 +92,15 @@ class _DashboardNoteState extends State<DashboardNote> {
             MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
-                onTap: () => Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Login(),
-                    ),
-                    (route) => false),
+                onTap: () {
+                  readNote.logout();
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Login(),
+                      ),
+                      (route) => false);
+                },
                 child: const ListTile(
                   leading: Icon(
                     Icons.exit_to_app,
@@ -113,77 +117,98 @@ class _DashboardNoteState extends State<DashboardNote> {
           ],
         ),
       ),
-      body: Consumer<NoteData>(builder: (context, provider, child) {
-        if(provider.isLoading){
-          return Center(child: const CircularProgressIndicator());
-        }
-      else{
-        return ListView.builder(
-        itemCount: watchNote.dataNote.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () async {
-              await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => HalamanScreen(
-                            index: index,
-                          )));
-              readNote.titleController = TextEditingController(text: '');
-              readNote.deskripsiController = TextEditingController(text: '');
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 1,
-                    offset: const Offset(1, 0),
-                  ),
-                  const BoxShadow(
+      body: StreamBuilder<List<NotesModel>>(
+        stream: readNote.getNotes(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            // ignore: avoid_print
+            print("${snapshot.error}");
+            return Center(
+              child: const Text('Something went wrong'),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (!snapshot.hasData || snapshot.data == null) {
+            return const Center(child: Text('No data available'));
+          }
+          List<NotesModel> notes = snapshot.data!;
+          return ListView.builder(
+            itemCount: notes.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () async {
+                  readNote.titleController =
+                      TextEditingController(text: notes[index].title);
+                  readNote.deskripsiController =
+                      TextEditingController(text: notes[index].deskripsi);
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HalamanScreen(
+                                metode: "update",
+                                noteId: notes[index].id!,
+                              )));
+                  readNote.titleController = TextEditingController(text: '');
+                  readNote.deskripsiController =
+                      TextEditingController(text: '');
+                },
+                child: Container(
+                  decoration: BoxDecoration(
                     color: Colors.white,
-                    offset: Offset(0, -1),
-                    spreadRadius: 2,
-                  )
-                ],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.all(20),
-              padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ListTile(
-                    title: Text(
-                      watchNote.dataNote[index].title ?? "-",
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(
-                      watchNote.dataNote[index].deskripsi ?? "-",
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w100),
-                    ),
-                    trailing: IconButton(
-                      onPressed: () {
-                      },
-                      icon: const Icon(Icons.delete),
-                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 1,
+                        offset: const Offset(1, 0),
+                      ),
+                      const BoxShadow(
+                        color: Colors.white,
+                        offset: Offset(0, -1),
+                        spreadRadius: 2,
+                      )
+                    ],
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                ],
-              ),
-            ),
+                  width: MediaQuery.of(context).size.width,
+                  margin: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        title: Text(
+                          notes[index].title ?? '-',
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          notes[index].deskripsi ?? '-',
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w100),
+                        ),
+                        trailing: IconButton(
+                          onPressed: () {
+                            watchNote.deleteNotes(notes[index].id!);
+                          },
+                          icon: const Icon(Icons.delete),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           );
         },
-      );}
-      },
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
@@ -198,7 +223,10 @@ class _DashboardNoteState extends State<DashboardNote> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HalamanScreen(),
+                      builder: (context) => HalamanScreen(
+                        metode: 'add',
+                        noteId: "",
+                      ),
                     ),
                   );
                 },

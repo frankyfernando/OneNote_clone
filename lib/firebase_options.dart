@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'onenote-app.appspot.com',
     measurementId: 'G-PFQEQQCCL3',
   );
+
 }

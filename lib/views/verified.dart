@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_onenote/views/dashboard.dart';
+import 'package:flutter_onenote/provider/notes_provider.dart';
+import 'package:provider/provider.dart';
 
 class Verified extends StatefulWidget {
   const Verified({super.key});
@@ -9,30 +10,9 @@ class Verified extends StatefulWidget {
 }
 
 class _VerifiedState extends State<Verified> {
-  TextEditingController password = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-    password = TextEditingController(text: 'password');
-  }
-
-  void verifiedPassword() {
-    if (password.text == 'password') {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const DashboardNote()),
-          (route) => false);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Maaf Password Anda Salah"),
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final readNote = context.read<NoteData>();
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
@@ -55,7 +35,7 @@ class _VerifiedState extends State<Verified> {
 
             // Row 2
             TextField(
-              controller: password,
+              controller: readNote.passwordController,
               obscureText: true,
               decoration: const InputDecoration(
                 labelText: 'Kata sandi',
@@ -69,7 +49,7 @@ class _VerifiedState extends State<Verified> {
             Container(
               alignment: Alignment.topLeft,
               child: TextButton(
-                  onPressed: (){},
+                  onPressed: () {},
                   child: const Text(
                     'Lupa kata sandi?',
                     style: TextStyle(
@@ -90,7 +70,9 @@ class _VerifiedState extends State<Verified> {
                     style: TextButton.styleFrom(
                         fixedSize: Size(MediaQuery.of(context).size.width,
                             MediaQuery.of(context).size.height)),
-                    onPressed: verifiedPassword,
+                    onPressed: () async{
+                      await readNote.signIn(context);
+                    },
                     child: const Text(
                       "Masuk",
                       style: TextStyle(color: Colors.white),

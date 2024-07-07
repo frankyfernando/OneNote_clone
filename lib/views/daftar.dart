@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onenote/provider/notes_provider.dart';
-import 'package:flutter_onenote/views/daftar.dart';
-import 'package:flutter_onenote/views/verified.dart';
+
+import 'package:flutter_onenote/views/login.dart';
 import 'package:provider/provider.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class Daftar extends StatefulWidget {
+  const Daftar({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Daftar> createState() => _DaftarState();
 }
 
-class _LoginState extends State<Login> {
+class _DaftarState extends State<Daftar> {
   @override
   Widget build(BuildContext context) {
     final readNote = context.read<NoteData>();
@@ -23,7 +23,7 @@ class _LoginState extends State<Login> {
           // Row 1
           const Center(
             child: Text(
-              "Selamat Datang di OneNote",
+              "Daftar Akun OneNote",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
           ),
@@ -58,8 +58,30 @@ class _LoginState extends State<Login> {
               ),
             ),
           ),
-          
-          // Row 5
+
+          const SizedBox(
+            height: 20,
+          ),
+
+          Container(
+            margin: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+            ),
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            alignment: Alignment.center,
+            child: TextField(
+              controller: readNote.passwordController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Password',
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
           Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.only(left: 10),
@@ -68,33 +90,30 @@ class _LoginState extends State<Login> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const Daftar(),
+                        builder: (context) => const Login(),
                       ));
                 },
                 child: const Text(
-                  "Belum punya akun?",
+                  "Sudah punya akun?",
                   style: TextStyle(color: Color.fromARGB(255, 47, 0, 255)),
                 )),
           ),
-          const SizedBox(
-            height: 5,
-          ),
-
-          // Row 6
+          // Row 5
           Container(
             margin: const EdgeInsets.only(left: 20, right: 20),
             height: 40,
             color: Colors.purple,
             width: MediaQuery.of(context).size.width,
             child: TextButton(
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Verified())),
+              onPressed: () {
+                readNote.signUp(context);
+              },
               style: TextButton.styleFrom(
                 fixedSize: Size(MediaQuery.of(context).size.width,
                     MediaQuery.of(context).size.height),
               ),
               child: const Text(
-                "Masuk",
+                "Daftar",
                 style: TextStyle(
                   color: Colors.white,
                 ),

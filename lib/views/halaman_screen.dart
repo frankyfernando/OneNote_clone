@@ -4,8 +4,12 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class HalamanScreen extends StatefulWidget {
-  int index;
-  HalamanScreen({super.key, this.index = 0});
+  String metode;
+  String noteId;
+  HalamanScreen(
+      {super.key,
+      required this.metode,
+      required this.noteId,});
 
   @override
   State<HalamanScreen> createState() => _HalamanScreenState();
@@ -24,20 +28,31 @@ class _HalamanScreenState extends State<HalamanScreen> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IconButton(
-              onPressed: () async {
-                bool response = await watchNote.addNote(
-                    deskripsi: readNote.deskripsiController.text,
-                    time: DateTime.now(),
-                    title: readNote.titleController.text);
-                if (response) {
-                  print('add berhasil');
-                } else {
-                  print('error');
-                }
-                readNote.hapusData();
-                readNote.getNotes();
-                Navigator.pop(context);
-              },
+              onPressed: widget.metode == 'update'
+                  ? () async {
+                      bool response = await watchNote.updateNote(
+                          widget.noteId,
+                          readNote.titleController.text,
+                          readNote.deskripsiController.text);
+                      if (response) {
+                        print('update berhasil');
+                      } else {
+                        print('update gagal');
+                      }
+                      Navigator.pop(context);
+                    }
+                  : () async {
+                      bool response = await watchNote.addNote(
+                          deskripsi: readNote.deskripsiController.text,
+                          time: DateTime.now(),
+                          title: readNote.titleController.text);
+                      if (response) {
+                        print('add berhasil');
+                      } else {
+                        print('error');
+                      }
+                      Navigator.pop(context);
+                    },
               icon: const Icon(Icons.save),
             ),
             IconButton(
